@@ -11,7 +11,7 @@ import com.lilithsthrone.utils.Util;
 
 /**
  * @since 0.1.69.9
- * @version 0.2.5
+ * @version 0.2.11
  * @author Innoxia
  */
 public enum ParserTarget {
@@ -236,6 +236,39 @@ public enum ParserTarget {
 		@Override
 		public GameCharacter getCharacter(String tag) {
 			return Main.game.getVicky();
+		}
+	},
+	
+	WALLACE(Util.newArrayListOfValues("wallace"), "") {
+		public String getDescription() {
+			return Main.game.getWallace().getDescription();
+		}
+		
+		@Override
+		public GameCharacter getCharacter(String tag) {
+			return Main.game.getWallace();
+		}
+	},
+	
+	EIRWEN(Util.newArrayListOfValues("eirwen"), "") {
+		public String getDescription() {
+			return Main.game.getEirwen().getDescription();
+		}
+		
+		@Override
+		public GameCharacter getCharacter(String tag) {
+			return Main.game.getEirwen();
+		}
+	}, 
+	
+	RECHT(Util.newArrayListOfValues("recht"), "") {
+		public String getDescription() {
+			return Main.game.getRecht().getDescription();
+		}
+		
+		@Override
+		public GameCharacter getCharacter(String tag) {
+			return Main.game.getRecht();
 		}
 	},
 	
