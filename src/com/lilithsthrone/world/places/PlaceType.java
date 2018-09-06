@@ -38,6 +38,7 @@ import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.ClothingEm
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.DreamLover;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.PixsPlayground;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.RalphsSnacks;
+import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.ServantsHall;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.ShoppingArcadeDialogue;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.SuccubisSecrets;
 import com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade.SupplierDepot;
@@ -70,7 +71,7 @@ import com.lilithsthrone.world.WorldType;
 
 /**
  * @since 0.1.0
- * @version 0.2.10
+ * @version 0.2.11
  * @author Innoxia
  */
 public enum PlaceType {
@@ -809,6 +810,8 @@ public enum PlaceType {
 	SHOPPING_ARCADE_KATES_SHOP("Succubi's Secrets", "dominion/shoppingArcade/kateShop", BaseColour.PINK, Colour.MAP_BACKGROUND, SuccubisSecrets.EXTERIOR, null, false, true, true, "in her beauty salon"),
 
 	SHOPPING_ARCADE_ASHLEYS_SHOP("Dream Lover", "dominion/shoppingArcade/ashleyShop", BaseColour.LILAC_LIGHT, Colour.MAP_BACKGROUND, DreamLover.EXTERIOR, null, false, true, true, "in their store"),
+	
+	SHOPPING_ARCADE_SERVANTS_HALL("Servants' Hall", "dominion/slaverAlley/slaveryAdministration", BaseColour.BLUE, Colour.MAP_BACKGROUND, ServantsHall.EXTERIOR, null, false, true, true, "in his store"),
 	
 	SHOPPING_ARCADE_SUPPLIER_DEPOT("Supplier Depot", "dominion/shoppingArcade/supplierDepot", BaseColour.CRIMSON, Colour.MAP_BACKGROUND, SupplierDepot.EXTERIOR, null, false, true, true, "in the supplier depot") {
 		@Override
