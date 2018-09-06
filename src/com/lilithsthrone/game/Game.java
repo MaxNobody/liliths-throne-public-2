@@ -54,6 +54,7 @@ import com.lilithsthrone.game.character.npc.dominion.Bunny;
 import com.lilithsthrone.game.character.npc.dominion.CandiReceptionist;
 import com.lilithsthrone.game.character.npc.dominion.Cultist;
 import com.lilithsthrone.game.character.npc.dominion.DominionAlleywayAttacker;
+import com.lilithsthrone.game.character.npc.dominion.Eirwen;
 import com.lilithsthrone.game.character.npc.dominion.Finch;
 import com.lilithsthrone.game.character.npc.dominion.HarpyBimbo;
 import com.lilithsthrone.game.character.npc.dominion.HarpyBimboCompanion;
@@ -72,6 +73,7 @@ import com.lilithsthrone.game.character.npc.dominion.Nyan;
 import com.lilithsthrone.game.character.npc.dominion.Pazu;
 import com.lilithsthrone.game.character.npc.dominion.Pix;
 import com.lilithsthrone.game.character.npc.dominion.Ralph;
+import com.lilithsthrone.game.character.npc.dominion.Recht;
 import com.lilithsthrone.game.character.npc.dominion.ReindeerOverseer;
 import com.lilithsthrone.game.character.npc.dominion.Rose;
 import com.lilithsthrone.game.character.npc.dominion.Scarlett;
@@ -80,6 +82,7 @@ import com.lilithsthrone.game.character.npc.dominion.SupplierLeader;
 import com.lilithsthrone.game.character.npc.dominion.SupplierPartner;
 import com.lilithsthrone.game.character.npc.dominion.TestNPC;
 import com.lilithsthrone.game.character.npc.dominion.Vicky;
+import com.lilithsthrone.game.character.npc.dominion.Wallace;
 import com.lilithsthrone.game.character.npc.dominion.Zaranix;
 import com.lilithsthrone.game.character.npc.dominion.ZaranixMaidKatherine;
 import com.lilithsthrone.game.character.npc.dominion.ZaranixMaidKelly;
@@ -1055,7 +1058,18 @@ public class Game implements Serializable, XMLSaving {
 			addNPC(new Pix(), false);
 			
 			addNPC(new Kate(), false);
+			
+			Wallace wallace = new Wallace();
+            		addNPC(wallace, false);
+			Eirwen eirwen = new Eirwen();
+			addNPC(eirwen, false);
+			eirwen.setAffection(wallace, 80);
+			wallace.setAffection(eirwen, 80);
+			wallace.addSlave(eirwen);
+			eirwen.setObedience(90);
 
+			addNPC(new Recht(), false);
+			
 			// Harpy nests:
 			
 			Scarlett scarlett = new Scarlett();
@@ -3230,6 +3244,33 @@ public class Game implements Serializable, XMLSaving {
 			return (NPC) this.getNPCById(getUniqueNPCId(Kalahari.class));
 		} catch (Exception e) {
 			System.err.println("getKalahari() returning null!");
+			return null;
+		}
+	}
+	
+	public NPC getWallace() {
+		try {
+			return (NPC) this.getNPCById(getUniqueNPCId(Wallace.class));
+		} catch (Exception e) {
+			System.err.println("getWallace() returning null!");
+			return null;
+		}
+	}
+	
+	public NPC getEirwen() {
+		try {
+			return (NPC) this.getNPCById(getUniqueNPCId(Eirwen.class));
+		} catch (Exception e) {
+			System.err.println("getEirwen() returning null!");
+			return null;
+		}
+	}
+	
+	public NPC getRecht() {
+		try {
+			return (NPC) this.getNPCById(getUniqueNPCId(Recht.class));
+		} catch (Exception e) {
+			System.err.println("getRecth() returning null!");
 			return null;
 		}
 	}
