@@ -61,6 +61,11 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 	
 	protected List<String> friendlyOccupants;
 	
+	// Servants' Hall Hunt contracts
+	private List<HuntingContract> huntingContracts;
+	
+	private HuntingContract activeContract;
+	
 	// Trader buy-back:
 	private SizedStack<ShopTransaction> buybackStack;
 
@@ -94,6 +99,9 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 		charactersEncountered = new ArrayList<>();
 
 		friendlyOccupants = new ArrayList<>();
+		
+		huntingContracts = null;
+		activeContract = null;
 		
 		this.setAttribute(Attribute.MAJOR_PHYSIQUE, 10f, false);
 		this.setAttribute(Attribute.MAJOR_ARCANE, 0f, false);
@@ -133,6 +141,80 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 		playerSpecific.appendChild(charactersEncounteredElement);
 		for(String id : charactersEncountered) {
 			CharacterUtils.createXMLElementWithValue(doc, charactersEncounteredElement, "id", id);
+		}
+		// TODO : Make a function to translate a contract to XML to clear code. I'll do it Inno no worry! -Max Nobody
+	        Element slaveHuntElement = doc.createElement("slaveHunts");
+        	playerSpecific.appendChild(slaveHuntElement);
+        	Element contractElement;
+        	int i = 0;
+        	for(HuntingContract contract : this.getAvailableContracts()) {
+        		contractElement = doc.createElement("availableContract");
+        		slaveHuntElement.appendChild(contractElement);
+        		CharacterUtils.addAttribute(doc, contractElement, "level", String.valueOf(contract.getLevel()));
+			CharacterUtils.addAttribute(doc, contractElement, "obedienceMin", String.valueOf(contract.getObedienceMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "obedienceMax", String.valueOf(contract.getObedienceMax()));
+        		CharacterUtils.addAttribute(doc, contractElement, "heightMin", String.valueOf(contract.getHeightMin()));
+        		CharacterUtils.addAttribute(doc, contractElement, "heightMax", String.valueOf(contract.getHeightMax()));
+        		CharacterUtils.addAttribute(doc, contractElement, "pussyMin", String.valueOf(contract.getPussyMin()));
+        		CharacterUtils.addAttribute(doc, contractElement, "pussyMax", String.valueOf(contract.getPussyMax()));
+        		CharacterUtils.addAttribute(doc, contractElement, "anusMin", String.valueOf(contract.getAnusMin()));
+            		CharacterUtils.addAttribute(doc, contractElement, "anusMax", String.valueOf(contract.getAnusMax()));
+        		CharacterUtils.addAttribute(doc, contractElement, "penisMin", String.valueOf(contract.getPenisMin()));
+        		CharacterUtils.addAttribute(doc, contractElement, "penisMax", String.valueOf(contract.getPenisMin()));
+        		CharacterUtils.addAttribute(doc, contractElement, "valueMultiplier", String.valueOf(contract.getValueMultiplier()));
+			CharacterUtils.addAttribute(doc, contractElement, "vaginalVirgin", String.valueOf(contract.getVaginalVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "analVirgin", String.valueOf(contract.getAnalVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "oralVirgin", String.valueOf(contract.getOralVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "race", String.valueOf(contract.getRace()));
+			CharacterUtils.addAttribute(doc, contractElement, "skinColour", String.valueOf(contract.getSkinColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "eyeColour", String.valueOf(contract.getEyeColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "hairColour", String.valueOf(contract.getHairColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "bodySize", String.valueOf(contract.getBodySize()));
+			CharacterUtils.addAttribute(doc, contractElement, "muscle", String.valueOf(contract.getMuscle()));
+			CharacterUtils.addAttribute(doc, contractElement, "gender", String.valueOf(contract.getGender()));
+			CharacterUtils.addAttribute(doc, contractElement, "cupSizeMin", String.valueOf(contract.getCupSizeMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "cupSizeMax", String.valueOf(contract.getCupSizeMax()));
+            		while (contract.getFetishes() != null && i < contract.getFetishes().size()) {
+				CharacterUtils.addAttribute(doc, contractElement, "fetish"+i, String.valueOf(contract.getFetishes().get(i)));
+				i++;
+			}
+			CharacterUtils.addAttribute(doc, contractElement, "derivedFetish", String.valueOf(contract.getDerivedFetish()));
+			CharacterUtils.addAttribute(doc, contractElement, "sexualOrientation", String.valueOf(contract.getSexualOrientation()));
+		}
+        	HuntingContract activeContract = null;
+        	if ((activeContract = this.getActiveContract()) != null) {
+			contractElement = doc.createElement("activeContract");
+			slaveHuntElement.appendChild(contractElement);
+			CharacterUtils.addAttribute(doc, contractElement, "level", String.valueOf(activeContract.getLevel()));
+			CharacterUtils.addAttribute(doc, contractElement, "obedienceMin", String.valueOf(activeContract.getObedienceMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "obedienceMax", String.valueOf(activeContract.getObedienceMax()));
+			CharacterUtils.addAttribute(doc, contractElement, "heightMin", String.valueOf(activeContract.getHeightMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "heightMax", String.valueOf(activeContract.getHeightMax()));
+			CharacterUtils.addAttribute(doc, contractElement, "pussyMin", String.valueOf(activeContract.getPussyMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "pussyMax", String.valueOf(activeContract.getPussyMax()));
+			CharacterUtils.addAttribute(doc, contractElement, "anusMin", String.valueOf(activeContract.getAnusMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "anusMax", String.valueOf(activeContract.getAnusMax()));
+			CharacterUtils.addAttribute(doc, contractElement, "penisMin", String.valueOf(activeContract.getPenisMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "penisMax", String.valueOf(activeContract.getPenisMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "valueMultiplier", String.valueOf(activeContract.getValueMultiplier()));
+			CharacterUtils.addAttribute(doc, contractElement, "vaginalVirgin", String.valueOf(activeContract.getVaginalVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "analVirgin", String.valueOf(activeContract.getAnalVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "oralVirgin", String.valueOf(activeContract.getOralVirgin()));
+			CharacterUtils.addAttribute(doc, contractElement, "race", String.valueOf(activeContract.getRace()));
+			CharacterUtils.addAttribute(doc, contractElement, "skinColour", String.valueOf(activeContract.getSkinColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "eyeColour", String.valueOf(activeContract.getEyeColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "hairColour", String.valueOf(activeContract.getHairColour()));
+			CharacterUtils.addAttribute(doc, contractElement, "bodySize", String.valueOf(activeContract.getBodySize()));
+			CharacterUtils.addAttribute(doc, contractElement, "muscle", String.valueOf(activeContract.getMuscle()));
+			CharacterUtils.addAttribute(doc, contractElement, "gender", String.valueOf(activeContract.getGender()));
+			CharacterUtils.addAttribute(doc, contractElement, "cupSizeMin", String.valueOf(activeContract.getCupSizeMin()));
+			CharacterUtils.addAttribute(doc, contractElement, "cupSizeMax", String.valueOf(activeContract.getCupSizeMax()));
+			while (activeContract.getFetishes() != null && i < activeContract.getFetishes().size()) {
+				CharacterUtils.addAttribute(doc, contractElement, "fetish"+i, String.valueOf(activeContract.getFetishes().get(i)));
+				i++;
+			}
+			CharacterUtils.addAttribute(doc, contractElement, "derivedFetish", String.valueOf(activeContract.getDerivedFetish()));
+			CharacterUtils.addAttribute(doc, contractElement, "sexualOrientation", String.valueOf(activeContract.getSexualOrientation()));
 		}
 		
 		innerElement = doc.createElement("questMap");
@@ -195,6 +277,16 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 			}
 			if(playerSpecificElement.getElementsByTagName("relationshipQuestUpdated").getLength()!=0) {
 				character.setRelationshipQuestUpdated(Boolean.valueOf(((Element)playerSpecificElement.getElementsByTagName("relationshipQuestUpdated").item(0)).getAttribute("value")));
+			}
+			if(playerSpecificElement.getElementsByTagName("availableContract").getLength()!=0) {
+				int i = 0;
+				while (i < playerSpecificElement.getElementsByTagName("availableContract").getLength()) {
+					character.addAvailableContractFromXMLValues((Element)playerSpecificElement.getElementsByTagName("availableContract").item(i));
+					i++;
+				}
+			}
+			if(playerSpecificElement.getElementsByTagName("activeContract").getLength() != 0) {
+				character.addActiveContractFromXMLValues ((Element)playerSpecificElement.getElementsByTagName("activeContract").item(0));
 			}
 	
 			try {
@@ -318,6 +410,98 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 		return character;
 	}
 
+	private void addAvailableContractFromXMLValues(Element element) {
+        	int contractID;
+        	if (this.getAvailableContracts() == null) {
+			this.setAvailableContracts(new ArrayList<HuntingContract>());
+			this.getAvailableContracts().add(new HuntingContract());
+			contractID = 0;
+		} else {
+			contractID = this.getAvailableContracts().size();
+			this.getAvailableContracts().add(new HuntingContract());
+		}
+		this.getAvailableContracts().get(contractID).setAnalVirgin(Boolean.valueOf(element.getAttribute("analVirgin")));
+		this.getAvailableContracts().get(contractID).setAnusMax(Integer.valueOf(element.getAttribute("anusMax")));
+		this.getAvailableContracts().get(contractID).setAnusMin(Integer.valueOf(element.getAttribute("anusMin")));
+		this.getAvailableContracts().get(contractID).setBodySize(BodySize.getEnum(element.getAttribute("bodySize")));
+		this.getAvailableContracts().get(contractID).setCupSizeMax(CupSize.getEnum(element.getAttribute("cupSizeMax")));
+		this.getAvailableContracts().get(contractID).setCupSizeMin(CupSize.getEnum(element.getAttribute("cupSizeMin")));
+		if (!element.getAttribute("derivedFetish").equals("null")) {
+			this.getAvailableContracts().get(contractID).setDerivedFetish(Fetish.getEnum(element.getAttribute("derivedFetish")));
+		} else {
+			this.getAvailableContracts().get(contractID).setDerivedFetish(null);
+		}
+		this.getAvailableContracts().get(contractID).setEyeColour(Colour.getEnum(element.getAttribute("eyeColour")));
+		int i = 0;
+		while (element.getAttribute("fetish"+i) != "") {
+			if (i == 0) {
+				this.getAvailableContracts().get(contractID).setFetishes(new ArrayList<Fetish>());
+			}
+			this.getAvailableContracts().get(contractID).getFetishes().add(Fetish.getEnum(element.getAttribute("fetish"+i)));
+			i++;
+		}
+		this.getAvailableContracts().get(contractID).setGender(Gender.getEnum(element.getAttribute("gender")));
+		this.getAvailableContracts().get(contractID).setHairColour(Colour.getEnum(element.getAttribute("hairColour")));
+		this.getAvailableContracts().get(contractID).setHeightMax(Integer.valueOf(element.getAttribute("heightMax")));
+		this.getAvailableContracts().get(contractID).setHeightMin(Integer.valueOf(element.getAttribute("heightMin")));
+		this.getAvailableContracts().get(contractID).setLevel(Integer.valueOf(element.getAttribute("level")));
+		this.getAvailableContracts().get(contractID).setMuscle(Muscle.getEnum(element.getAttribute("muscle")));
+		this.getAvailableContracts().get(contractID).setObedienceMax(Integer.valueOf(element.getAttribute("obedienceMax")));
+		this.getAvailableContracts().get(contractID).setObedienceMin(Integer.valueOf(element.getAttribute("obedienceMin")));
+		this.getAvailableContracts().get(contractID).setOralVirgin(Boolean.valueOf(element.getAttribute("oralVirgin")));
+		this.getAvailableContracts().get(contractID).setPenisMax(Integer.valueOf(element.getAttribute("penisMax")));
+		this.getAvailableContracts().get(contractID).setPenisMin(Integer.valueOf(element.getAttribute("penisMin")));
+		this.getAvailableContracts().get(contractID).setPussyMax(Integer.valueOf(element.getAttribute("pussyMax")));
+		this.getAvailableContracts().get(contractID).setPussyMin(Integer.valueOf(element.getAttribute("pussyMin")));
+		this.getAvailableContracts().get(contractID).setRace(Race.getEnum(element.getAttribute("race")));
+		this.getAvailableContracts().get(contractID).setSexualOrientation(SexualOrientation.getEnum(element.getAttribute("sexualOrientation")));
+		this.getAvailableContracts().get(contractID).setSkinColour(Colour.getEnum(element.getAttribute("skinColour")));
+		this.getAvailableContracts().get(contractID).setVaginalVirgin(Boolean.valueOf(element.getAttribute("vaginalVirgin")));
+		this.getAvailableContracts().get(contractID).setValueMultiplier(Double.valueOf(element.getAttribute("valueMultiplier")));
+	}
+    
+	private void addActiveContractFromXMLValues(Element element) {
+		this.setActiveContract(new HuntingContract());
+		this.getActiveContract().setAnalVirgin(Boolean.valueOf(element.getAttribute("analVirgin")));
+		this.getActiveContract().setAnusMax(Integer.valueOf(element.getAttribute("anusMax")));
+		this.getActiveContract().setAnusMin(Integer.valueOf(element.getAttribute("anusMin")));
+		this.getActiveContract().setBodySize(BodySize.getEnum(element.getAttribute("bodySize")));
+		this.getActiveContract().setCupSizeMax(CupSize.getEnum(element.getAttribute("cupSizeMax")));
+		this.getActiveContract().setCupSizeMin(CupSize.getEnum(element.getAttribute("cupSizeMin")));
+		if (!element.getAttribute("derivedFetish").equals("null")) {
+			this.getActiveContract().setDerivedFetish(Fetish.getEnum(element.getAttribute("derivedFetish")));
+		} else {
+			this.getActiveContract().setDerivedFetish(null);
+		}
+		this.getActiveContract().setEyeColour(Colour.getEnum(element.getAttribute("eyeColour")));
+		int i = 0;
+		while (element.getAttribute("fetish"+i) != "") {
+			if (i == 0) {
+				this.getActiveContract().setFetishes(new ArrayList<Fetish>());
+			}
+			this.getActiveContract().getFetishes().add(Fetish.getEnum(element.getAttribute("fetish"+i)));
+			i++;
+		}
+		this.getActiveContract().setGender(Gender.getEnum(element.getAttribute("gender")));
+		this.getActiveContract().setHairColour(Colour.getEnum(element.getAttribute("hairColour")));
+		this.getActiveContract().setHeightMax(Integer.valueOf(element.getAttribute("heightMax")));
+		this.getActiveContract().setHeightMin(Integer.valueOf(element.getAttribute("heightMin")));
+		this.getActiveContract().setLevel(Integer.valueOf(element.getAttribute("level")));
+		this.getActiveContract().setMuscle(Muscle.getEnum(element.getAttribute("muscle")));
+		this.getActiveContract().setObedienceMax(Integer.valueOf(element.getAttribute("obedienceMax")));
+		this.getActiveContract().setObedienceMin(Integer.valueOf(element.getAttribute("obedienceMin")));
+		this.getActiveContract().setOralVirgin(Boolean.valueOf(element.getAttribute("oralVirgin")));
+		this.getActiveContract().setPenisMax(Integer.valueOf(element.getAttribute("penisMax")));
+		this.getActiveContract().setPenisMin(Integer.valueOf(element.getAttribute("penisMin")));
+		this.getActiveContract().setPussyMax(Integer.valueOf(element.getAttribute("pussyMax")));
+		this.getActiveContract().setPussyMin(Integer.valueOf(element.getAttribute("pussyMin")));
+		this.getActiveContract().setRace(Race.getEnum(element.getAttribute("race")));
+		this.getActiveContract().setSexualOrientation(SexualOrientation.getEnum(element.getAttribute("sexualOrientation")));
+		this.getActiveContract().setSkinColour(Colour.getEnum(element.getAttribute("skinColour")));
+		this.getActiveContract().setVaginalVirgin(Boolean.valueOf(element.getAttribute("vaginalVirgin")));
+		this.getActiveContract().setValueMultiplier(Double.valueOf(element.getAttribute("valueMultiplier")));
+	}
+	
 	@Override
 	protected void updateAttributeListeners() {
 		if (playerAttributeChangeEventListeners != null)
@@ -413,6 +597,29 @@ public class PlayerCharacter extends GameCharacter implements XMLSaving {
 	public void incrementKarma(int increment) {
 		this.karma += increment;
 	}
+	
+	public List<HuntingContract> getAvailableContracts() {
+        	return this.huntingContracts;
+	}
+    
+	public HuntingContract getActiveContract() {
+        	return this.activeContract;
+	}
+    
+	public void setAvailableContracts(List<HuntingContract> huntingContracts) {
+        	this.huntingContracts = huntingContracts;
+	}
+    
+    	public void setActiveContract(HuntingContract activeContract) {
+        	this.activeContract = activeContract;
+    	}
+    
+    	// Choose the contracts from the list of possibles contracts
+    	public void setActiveContract(int id) {
+        	if (this.huntingContracts.get(id) != null) {
+            		this.activeContract = this.huntingContracts.get(id);
+        	}
+    	}
 	
 	@Override
 	public boolean isRelatedTo(GameCharacter character) {
