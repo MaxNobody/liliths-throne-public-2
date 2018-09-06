@@ -4,7 +4,7 @@ import com.lilithsthrone.utils.Colour;
 
 /**
  * @since 0.1.79
- * @version 0.2.7
+ * @version 0.2.11
  * @author Innoxia
  */
 public enum SexualOrientation {
@@ -30,5 +30,16 @@ public enum SexualOrientation {
 	public Colour getColour() {
 		return colour;
 	}
+	
+	public static SexualOrientation getEnum(String value) {
+        if (value.equals("null")) {
+        	return null;
+        }
+        for(SexualOrientation orientation : values())
+            if(orientation.name().equalsIgnoreCase(value)) {
+            	return orientation;
+            }
+        throw new IllegalArgumentException();
+    }
 	
 }
