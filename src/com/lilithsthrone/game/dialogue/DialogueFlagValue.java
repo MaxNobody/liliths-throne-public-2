@@ -40,6 +40,7 @@ public enum DialogueFlagValue {
 	nyanIntroduced,
 	kateIntroduced,
 	vickyIntroduced,
+	wallaceIntroduced,
 
 	roxyIntroduced,
 	axelIntroduced,
@@ -67,6 +68,8 @@ public enum DialogueFlagValue {
 	ashleyAttitude,
 	
 	reactedToKatePregnancy,
+	
+	huntingExplained,
 	
 	// Lilaya's Home:
 	knowsDate,
