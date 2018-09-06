@@ -20,7 +20,7 @@ import com.lilithsthrone.utils.Util.Value;
 
 /**
  * @since 0.1.?
- * @version 0.1.99
+ * @version 0.2.11
  * @author Innoxia
  */
 public enum Fetish {
@@ -1654,4 +1654,15 @@ public enum Fetish {
 	public static int getExperienceGainFromTakingOtherVirginity(GameCharacter owner) {
 		return owner.getLevel();
 	}
+	
+	public static Fetish getEnum(String value) {
+        if (value.equals("null")) {
+        	return null;
+        }
+        for(Fetish fetish : values())
+            if(fetish.name().equalsIgnoreCase(value)) {
+            	return fetish;
+            }
+        throw new IllegalArgumentException();
+    }
 }
