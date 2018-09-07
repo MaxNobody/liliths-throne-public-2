@@ -1036,8 +1036,9 @@ public enum Colour {
 			if(colour.name().equalsIgnoreCase(value)) {
             		return colour;
             	}
-        	throw new IllegalArgumentException();
     	}
+    	throw new IllegalArgumentException();
+	}
 	
 	/**
 	 * @return An array of length 5, with [0] being darkest, [4] being lightest.
