@@ -1,4 +1,4 @@
-package com.lilithsthrone.game.slavery;
+package com.lilithsthrone.game.occupantManagement;
 
 import com.lilithsthrone.game.Season;
 import com.lilithsthrone.game.character.body.Covering;
@@ -12,7 +12,6 @@ import com.lilithsthrone.game.character.fetishes.Fetish;
 import com.lilithsthrone.game.character.race.RaceStage;
 import com.lilithsthrone.game.character.race.Subspecies;
 import com.lilithsthrone.game.character.gender.Gender;
-import com.lilithsthrone.game.character.gender.GenderPreference;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.character.persona.SexualOrientation;
 import com.lilithsthrone.game.character.race.FurryPreference;
@@ -78,7 +77,7 @@ public class HuntingContract
 			this.ObedienceMax = -200;
 			this.HeightMin = -200;
 			this.HeightMax = -200;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.28f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -158,7 +157,7 @@ public class HuntingContract
 			this.ObedienceMax = -200;
 			this.HeightMin = -200;
 			this.HeightMax = -200;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.44f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -257,7 +256,7 @@ public class HuntingContract
 			}
 			this.HeightMin = -200;
 			this.HeightMax = -200;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.58f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -356,7 +355,7 @@ public class HuntingContract
 			}
 			this.HeightMin = -200;
 			this.HeightMax = -200;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.7f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -462,7 +461,7 @@ public class HuntingContract
 			}
 			this.HeightMin = -200;
 			this.HeightMax = -200;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.8f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -576,7 +575,7 @@ public class HuntingContract
 				this.HeightMin = this.HeightMax - 16;
 				this.valueMultiplier += 0.3f;
 			}
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.88f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -685,7 +684,7 @@ public class HuntingContract
 				this.HeightMin = this.HeightMax - 16;
 				this.valueMultiplier += 0.3f;
 			}
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.94f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -796,7 +795,7 @@ public class HuntingContract
 				this.HeightMin = this.HeightMax - 12;
 				this.valueMultiplier += 0.3f;
 			}
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			if (Math.random() <= 0.98f) {
 				this.skinColour = randomSkinFromRace(this.race);
@@ -905,7 +904,7 @@ public class HuntingContract
 			this.HeightMax = (int)Math.floor(Math.random() * 20) + 166; // TODO : Rework size to take race into account
 			this.HeightMin = this.HeightMax - 12;
 			this.valueMultiplier += 0.3f;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			this.skinColour = randomSkinFromRace(this.race);
 			this.EyeColour = randomEyeColourFromRace(this.race);
@@ -1018,7 +1017,7 @@ public class HuntingContract
 			this.HeightMax = (int)Math.floor(Math.random() * 20) + 163; // TODO : Rework size to take race into account
 			this.HeightMin = this.HeightMax - 6;
 			this.valueMultiplier += 0.3f;
-			this.gender = GenderPreference.getGenderFromUserPreferences(false, false);
+			this.gender = Gender.getGenderFromUserPreferences(false, false);
 			this.race = randomRace(this.gender);
 			this.skinColour = randomSkinFromRace(this.race);
 			this.EyeColour = randomEyeColourFromRace(this.race);
@@ -1166,34 +1165,6 @@ public class HuntingContract
 				addToSubspeciesMap(5, gender, s, availableRaces);
 				break;
 			case SLIME:
-			case SLIME_ALLIGATOR:
-			case SLIME_ANGEL:
-			case SLIME_CAT:
-			case SLIME_CAT_LEOPARD:
-			case SLIME_CAT_LEOPARD_SNOW:
-			case SLIME_CAT_LYNX:
-			case SLIME_CAT_LION:
-			case SLIME_CAT_TIGER:
-			case SLIME_CAT_CARACAL:
-			case SLIME_CAT_CHEETAH:
-			case SLIME_COW:
-			case SLIME_DEMON:
-			case SLIME_DOG:
-			case SLIME_DOG_DOBERMANN:
-			case SLIME_DOG_BORDER_COLLIE:
-			case SLIME_FOX:
-			case SLIME_FOX_FENNEC:
-			case SLIME_HARPY:
-			case SLIME_HARPY_RAVEN:
-			case SLIME_HARPY_BALD_EAGLE:
-			case SLIME_HORSE:
-			case SLIME_IMP:
-			case SLIME_REINDEER:
-			case SLIME_SQUIRREL:
-			case SLIME_BAT:
-			case SLIME_RAT:
-			case SLIME_WOLF:
-			case SLIME_RABBIT:
 				addToSubspeciesMap(1, gender, s, availableRaces);
 				break;
 			case RAT_MORPH:
@@ -1300,7 +1271,6 @@ public class HuntingContract
 		case HUMAN:
 			return Colour.humanSkinColours.get((int)Math.floor(Math.random() * Colour.humanSkinColours.size()));
 		case DEMON:
-		case IMP:
 			return Colour.demonSkinColours.get((int)Math.floor(Math.random() * Colour.demonSkinColours.size()));
 		case COW_MORPH:
 		case DOG_MORPH:
@@ -1334,7 +1304,6 @@ public class HuntingContract
 		switch (race) {
 		case HUMAN:
 		case DEMON:
-		case IMP:
 		case COW_MORPH:
 		case DOG_MORPH:
 		case WOLF_MORPH:
@@ -1381,7 +1350,6 @@ public class HuntingContract
 		case SLIME:
 			return Colour.naturalSlimeColours.get((int)Math.floor(Math.random() * Colour.naturalSlimeColours.size()));
 		case DEMON:
-		case IMP:
 			return Colour.naturalDemonIrisColours.get((int)Math.floor(Math.random() * Colour.naturalDemonIrisColours.size()));
 		case ELEMENTAL_EARTH:
 		case ELEMENTAL_WATER:
