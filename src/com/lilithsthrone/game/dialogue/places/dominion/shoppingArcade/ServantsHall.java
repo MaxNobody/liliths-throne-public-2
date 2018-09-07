@@ -1,9 +1,8 @@
 package com.lilithsthrone.game.dialogue.places.dominion.shoppingArcade;
 
-import java.text.DecimalFormat;
+import java.util.List;
 
-import com.lilithsthrone.game.character.attributes.AffectionLevel;
-import com.lilithsthrone.game.character.attributes.ObedienceLevel;
+import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.npc.NPC;
 import com.lilithsthrone.game.dialogue.DialogueFlagValue;
 import com.lilithsthrone.game.dialogue.DialogueNodeOld;
@@ -11,8 +10,6 @@ import com.lilithsthrone.game.dialogue.responses.Response;
 import com.lilithsthrone.game.dialogue.responses.ResponseEffectsOnly;
 import com.lilithsthrone.game.dialogue.utils.UtilText;
 import com.lilithsthrone.main.Main;
-import com.lilithsthrone.utils.Colour;
-import com.lilithsthrone.utils.Util;
 import com.lilithsthrone.world.WorldType;
 import com.lilithsthrone.world.places.PlaceType;
 
@@ -122,11 +119,7 @@ public class ServantsHall {
 			if (index == 1) {
 				return new Response("Rent a slave", "You'd like to see which of his slaves are avaiable for renting<br>Not yet implemented ;.;", null);
 			} else if (index == 2) {
-				if (Main.game.getDialogueFlags().values.contains(DialogueFlagValue.freelanceSlaveTrained)) {
-					return new Response("Freelance", "Take a freelancing contract<br>Not yet implemented ;.;", null);
-				} else {
-					return new Response("Freelance", "Begin training to become a freelancer slave<br>Not yet implemented ;.;", null);
-				}
+				return new Response("Freelance", "Begin training to become a freelancer slave<br>Not yet implemented ;.;", null);
 			} else if (index == 3) {
 				if (Main.game.getDialogueFlags().values.contains(DialogueFlagValue.huntingExplained)) {
 					return new Response("Hunting", "Take a hunting contract", SLAVE_RENTAL_HUNT_REPEAT);
@@ -157,11 +150,7 @@ public class ServantsHall {
 			if (index == 1) {
 				return new Response("Rent a slave", "You'd like to see which of his slaves are avaiable for renting<br>Not yet implemented ;.;", null);
 			} else if (index == 2) {
-				if (Main.game.getDialogueFlags().values.contains(DialogueFlagValue.freelanceSlaveTrained)) {
-					return new Response("Freelance", "Take a freelancing contract<br>Not yet implemented ;.;", null);
-				} else {
 					return new Response("Freelance", "Begin training to become a freelancer slave<br>Not yet implemented ;.;", null);
-				}
 			} else if (index == 3) {
 				if (Main.game.getPlayer().getActiveContract() != null) {
 					return new Response("Contract", "About that contract you took...", SLAVE_RENTAL_CONTRACT);
@@ -362,7 +351,16 @@ public class ServantsHall {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("This is my slave", "Choose which slave you want to sell Wallace", SLAVE_RENTAL_HUNT_LIST);
+				if (Main.game.getPlayer().getCompanions().size() != 0 && hasSlaves(Main.game.getPlayer().getCompanions())) {
+					return new Response("This is my slave", "Give your companion to Wallace", SLAVE_RENTAL_HUNT_CHECK) {
+						@Override
+						public void effects() {
+							Main.game.getPlayer().getCompanions().get(takeSlave(Main.game.getPlayer().getCompanions())).setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_SERVANTS_HALL);
+						}
+					};
+				} else {
+					return new Response("This is my slave", "You don't have any slave to give as companion...", null);
+				}
 			} else if (index == 2) {
 				return new Response("Give up", "The contract is too hard...", null) {
 					@Override
@@ -379,105 +377,33 @@ public class ServantsHall {
 		public String getAuthor() {
 			return "Max Nobody";
 		}
-	};
-	
-	public static final DialogueNodeOld SLAVE_RENTAL_HUNT_LIST = new DialogueNodeOld("Slave Selection", ".", true) {
-		private static final long serialVersionUID = 1L;
 		
-		@Override
-		public String getContent() { // TODO : Add a function in SlaveryManagementDialogue to be able to use getSlaveryHeader and getSlaveryEntry. -Max Nobody
-			DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-			UtilText.nodeContentSB.setLength(0);
-			UtilText.nodeContentSB.append("<div class='container-full-width' style='margin-bottom:0;'>"
-					+ "<div style='width:20%; float:left; font-weight:bold; margin:0; padding:0;'>"
-					+ "Slave"
-				+ "</div>"
-				+ "<div style='width:20%; float:left; font-weight:bold; margin:0; padding:0;'>"
-					+ "Location"
-				+ "</div>"
-				+ "<div style='float:left; width:15%; font-weight:bold; margin:0; padding:0;'>"
-					+ "<b style='color:"+Colour.AFFECTION.toWebHexString()+";'>Affection</b>"
-				+"</div>"
-				+ "<div style='float:left; width:15%; font-weight:bold; margin:0; padding:0;'>"
-					+ "<b style='color:"+Colour.OBEDIENCE.toWebHexString()+";'>Obedience</b>"
-				+"</div>"
-				+ "<div style='float:left; width:15%; font-weight:bold; margin:0; padding:0;'>"
-					+ "<b style='color:"+Colour.CURRENCY_GOLD.toWebHexString()+";'>Value</b>"
-				+"</div>"
-			+ "</div>");
-			int i = 0;
-			for(String id : Main.game.getPlayer().getSlavesOwned()) {
-				NPC slave = (NPC) Main.game.getNPCById(id);
-				AffectionLevel affection = AffectionLevel.getAffectionLevelFromValue(slave.getAffection(Main.game.getPlayer()));
-				ObedienceLevel obedience = ObedienceLevel.getObedienceLevelFromValue(slave.getObedienceValue());
-				float affectionChange = slave.getDailyAffectionChange();
-				float obedienceChange = slave.getDailyObedienceChange();
-//				GenericPlace place = Main.game.getPlayerCell().getPlace(); // ?
-				
-				UtilText.nodeContentSB.append("<div class='container-full-width inner' style='margin-bottom:0;"+(i%2==0?"background:"+Colour.BACKGROUND_ALT.toWebHexString()+";'":"'")+"'>"
-				+ "<div style='width:20%; float:left; margin:0; padding:0;'>"
-					+ "<b style='color:"+slave.getFemininity().getColour().toWebHexString()+";'>"+slave.getName()+"</b><br/>"
-					+ "<span style='color:"+slave.getRace().getColour().toWebHexString()+";'>"+Util.capitaliseSentence((slave.isFeminine()?slave.getSubspecies().getSingularFemaleName():slave.getSubspecies().getSingularMaleName()))+"</span><br/>"
-					+ "<span style='color:"+slave.getFemininity().getColour().toWebHexString()+";'>"+Util.capitaliseSentence(slave.getGender().getName())+"</span>"
-				+ "</div>"
-				+ "<div style='width:20%; float:left; margin:0; padding:0;'>"
-					+ "<b style='color:"+slave.getLocationPlace().getColour().toWebHexString()+";'>"+slave.getLocationPlace().getName()+"</b>"
-					+",<br/>"
-					+ "<span style='color:"+slave.getWorldLocation().getColour().toWebHexString()+";'>"+slave.getWorldLocation().getName()+"</span>"
-				+ "</div>"
-				+ "<div style='float:left; width:15%; margin:0; padding:0;'>"
-					+ "<b style='color:"+affection.getColour().toWebHexString()+";'>"+slave.getAffection(Main.game.getPlayer())+ "</b>"
-					+ "<br/><span style='color:"+(affectionChange==0?Colour.BASE_GREY:(affectionChange>0?Colour.GENERIC_GOOD:Colour.GENERIC_BAD)).toWebHexString()+";'>"+(affectionChange>0?"+":"")
-						+decimalFormat.format(affectionChange)+"</span>/day"
-					+ "<br/>"
-					+ "<span style='color:"+affection.getColour().toWebHexString()+";'>"+Util.capitaliseSentence(affection.getName())+"</span>"
-				+"</div>"
-				+ "<div style='float:left; width:15%; margin:0; padding:0;'>"
-					+ "<b style='color:"+obedience.getColour().toWebHexString()+";'>"+slave.getObedienceValue()+ "</b>"
-					+ "<br/><span style='color:"+(obedienceChange==0?Colour.BASE_GREY:(obedienceChange>0?Colour.GENERIC_GOOD:Colour.GENERIC_BAD)).toWebHexString()+";'>"+(obedienceChange>0?"+":"")
-						+decimalFormat.format(obedienceChange)+"</span>/day"
-					+ "<br/>"
-					+ "<span style='color:"+obedience.getColour().toWebHexString()+";'>"+Util.capitaliseSentence(obedience.getName())+"</span>"
-				+"</div>"
-				+ "<div style='float:left; width:15%; margin:0; padding:0;'>"
-					+ (Main.game.getDialogueFlags().getSlaveTrader()!=null
-						?UtilText.formatAsMoney((int) (slave.getValueAsSlave()*Main.game.getDialogueFlags().getSlaveTrader().getBuyModifier()), "b", Colour.GENERIC_ARCANE)
-						:UtilText.formatAsMoney(slave.getValueAsSlave()))+"<br/>"
-					+ "<b>"+Util.capitaliseSentence(slave.getSlaveJob().getName(slave))+"</b><br/>"
-					+ UtilText.formatAsMoney(slave.getSlaveJob().getFinalDailyIncomeAfterModifiers(slave))+"/day"
-				+"</div></div>");
-				i++;
+		public boolean hasSlaves(List<GameCharacter> companions) {
+			if (companions.size() == 0) {
+				return false;
 			}
-			return (UtilText.nodeContentSB.toString());
-		}
-		
-		@Override
-		public Response getResponse(int responseTab, int index) {
-			int i = 0;
-			for(String id : Main.game.getPlayer().getSlavesOwned()) {
-				NPC slave = (NPC) Main.game.getNPCById(id);
-				if ((i < 15 ? i == index - 1 : i == index) || (i == 15 && index == 0)) {
-					return new Response (slave.getName(), "Give "+slave.getName()+" to Wallace", SLAVE_RENTAL_HUNT_CHECK) {
-						@Override
-						public void effects() {
-							slave.setLocation(WorldType.SHOPPING_ARCADE, PlaceType.SHOPPING_ARCADE_SERVANTS_HALL, true);
-						}
-					};
+			for (int i = 0; i < companions.size(); i++) {
+				if (companions.get(i).isSlave()) {
+					if (companions.get(i).getOwner() == Main.game.getPlayer()) {
+						return true;
+					}
 				}
-				i++;
 			}
-			while (i%15 != 0) {
-				i++;
-			}
-			if (i == 15 ? index == 0 : i == index) {
-				return new Response ("Back", "On second thoughts...", EXTERIOR);
-			}
-			return null;
+			return false;
 		}
 		
-		@Override
-		public String getAuthor() {
-			return "Max Nobody";
+		public int takeSlave(List<GameCharacter> companions) {
+			if (companions.size() == 0) {
+				return 0;
+			}
+			for (int i = 0; i < companions.size(); i++) {
+				if (companions.get(i).isSlave()) {
+					if (companions.get(i).getOwner() == Main.game.getPlayer()) {
+						return i;
+					}
+				}
+			}
+			return 0;
 		}
 	};
 	
@@ -544,17 +470,6 @@ public class ServantsHall {
 				return null;
 			}
 		}
-		
-		private int targetSlaveGiven() {
-			int i = 1;
-			for (NPC target : Main.game.getNonCompanionCharactersPresent()) {
-				if (!target.isUnique() && Main.game.getPlayer().hasCompanion(target)) {
-					return i;
-				}
-				i++;
-			}
-			return 1;
-		}
 	};
 	
 	public static final DialogueNodeOld SLAVE_RENTAL_HUNT_INVALID = new DialogueNodeOld ("Servants' Hall", "-", true) {
@@ -583,7 +498,7 @@ public class ServantsHall {
 	private static int targetSlaveGiven() {
 		int i = 1;
 		for (NPC target : Main.game.getNonCompanionCharactersPresent()) {
-			if (!target.isUnique()) {
+			if (!target.isUnique() && target.isSlave() && target.getOwner() == Main.game.getPlayer()) {
 				return i;
 			}
 			i++;
